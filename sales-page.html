@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Você não está quebrado – Página de Vendas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700&display=swap" rel="stylesheet">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            margin: 0;
+            /* Animated gradient background */
+            background: linear-gradient(120deg, #f7f4ef 0%, #e8e3d9 100%);
+            min-height: 100vh;
+            color: #2d2d2d;
+            font-family: 'Lato', Arial, sans-serif;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(120deg, #f7f4ef 0%, #e8e3d9 100%);
+            animation: gradientMove 8s ease-in-out infinite alternate;
+        }
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        .hero {
+            background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(40, 60, 80, 0.55);
+            /* Slightly stronger overlay for more emotional impact */
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: #fff;
+            padding: 60px 20px 40px 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInHero 1.2s ease-out 0.2s forwards;
+        }
+        @keyframes fadeInHero {
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+        .section {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 0 20px;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s, transform 0.8s;
+        }
+        .section.visible {
+            opacity: 1;
+            transform: none;
+        }
+        .section p {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            margin-bottom: 1.2em;
+        }
+        .ebook-mockup {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 40px 0 20px 0;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s, transform 0.8s;
+        }
+        .ebook-mockup.visible {
+            opacity: 1;
+            transform: none;
+        }
+        .ebook-mockup img {
+            width: 180px;
+            height: auto;
+            box-shadow: 0 8px 32px rgba(44, 44, 44, 0.18);
+            border-radius: 12px;
+            background: #e0e0e0;
+        }
+        .ebook-caption {
+            margin-top: 12px;
+            font-size: 1.1rem;
+            color: #f56342;
+            font-weight: bold;
+        }
+        .cta-btn {
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            margin: 40px auto 0 auto;
+            padding: 20px;
+            background: #f56342;
+            color: #fff;
+            font-size: 1.35rem;
+            text-align: center;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 16px rgba(245,99,66,0.08);
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+        .cta-btn:hover, .cta-btn:focus {
+            background: #d94d2a;
+            transform: scale(1.05);
+            box-shadow: 0 0 24px 4px #f5634266;
+        }
+        .footer {
+            text-align: center;
+            color: #888;
+            font-size: 1rem;
+            margin: 60px 0 20px 0;
+            letter-spacing: 0.2px;
+        }
+        .footer .heart {
+            color: #f56342;
+            font-size: 1.2em;
+            vertical-align: middle;
+            margin-left: 4px;
+        }
+        @media (max-width: 600px) {
+            h1 { font-size: 1.5rem; }
+            h2 { font-size: 1.1rem; }
+            .section { padding: 0 10px; }
+            .cta-btn { font-size: 1rem; padding: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Tem algo dentro de você que ninguém vê...<br>Mas que grita todos os dias.</h1>
+            <h2>Você não está quebrado.<br>
+                Você está sobrecarregado de silêncio, peso e memórias que nunca viraram palavras.<br>
+                Esse material nasceu para ser seu ponto de virada.
+            </h2>
+        </div>
+    </div>
+
+    <div class="section">
+        <p>Por muito tempo, você aprendeu a sobreviver calado.<br><br>
+        Engoliu dias ruins, sorrisos forçados, dores que ninguém entendeu.<br>
+        Tentou parecer forte. Tentou parecer normal.<br><br>
+        Mas a verdade?<br><br>
+        A sua mente não é sua inimiga. Ela só tá cansada.<br><br>
+        Este material não é só um e-book.<br>
+        É um abraço com palavras.<br>
+        É um reencontro com quem você sempre foi, antes de tudo isso.</p>
+    </div>
+
+    <div class="ebook-mockup">
+        <img src="https://via.placeholder.com/180x260.png?text=E-book+Mockup" alt="Mockup do E-book">
+        <div class="ebook-caption">Você pode começar agora. R$10.</div>
+    </div>
+
+    <div class="section">
+        <p>Escrito por alguém que já passou pelo mesmo —<br>
+        mas escolheu transformar dor em direção.<br><br>
+        Com base em psicologia simbólica,<br>
+        experiências reais<br>
+        e um convite para você finalmente se escutar de verdade.</p>
+    </div>
+
+    <div class="section">
+        <p>Você não precisa continuar carregando tudo sozinho.<br><br>
+        Cada página foi escrita para aliviar esse peso.<br>
+        Pra lembrar você que sentir não é fraqueza —<br>
+        é o começo da cura.<br><br>
+        Não é um curso.<br>
+        Não é autoajuda barata.<br><br>
+        É uma conversa direta com a parte sua que só quer respirar de novo.</p>
+    </div>
+
+    <a class="cta-btn" href="https://SEULINKAQUI.com" target="_blank">
+        🔓 Baixar agora por R$10 e aliviar esse peso agora mesmo
+    </a>
+
+    <div class="section">
+        <p>Você não chegou até aqui por acaso.<br>
+        E talvez esse seja o primeiro passo pra você voltar pra casa —<br>
+        dentro de você.<br><br>
+        O link está aqui.<br>
+        A resposta que você tanto buscava, também.</p>
+    </div>
+
+    <div class="footer">
+        ⚠️ Produto digital. Entrega imediata por e-mail.<br>
+        Você vai receber o PDF e um bônus surpresa exclusivo.
+        <span class="heart">♥</span>
+    </div>
+
+    <script>
+        // Optional: Smooth scroll for anchor links (if you add any)
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Fade-in animation for sections as they enter viewport
+        function revealOnScroll() {
+            const reveals = document.querySelectorAll('.section, .ebook-mockup');
+            const windowHeight = window.innerHeight;
+            reveals.forEach(el => {
+                const elementTop = el.getBoundingClientRect().top;
+                if (elementTop < windowHeight - 60) {
+                    el.classList.add('visible');
+                }
+            });
+        }
+        window.addEventListener('scroll', revealOnScroll);
+        window.addEventListener('DOMContentLoaded', revealOnScroll);
+    </script>
+</body>
+</html>
