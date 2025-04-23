@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "Página de vendas para o eBook 'Você Importa'",
   "main": "src/SalesPage.jsx",
+  "homepage": "https://isaacbrunodev.github.io/voceimporta-landingpage/",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -12,9 +15,9 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-helmet": "^6.1.0",
     "react-scripts": "^5.0.1",
-    "styled-components": "^5.3.10",
-    "react-helmet": "^6.1.0"
+    "styled-components": "^5.3.10"
   },
   "browserslist": {
     "production": [
@@ -27,5 +30,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^6.3.0"
   }
 }

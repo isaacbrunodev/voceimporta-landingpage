@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled, { keyframes, createGlobalStyle } from "styled-components";
 import { Helmet } from 'react-helmet';
+import ebookCover from './images/ebook.png'; // Adicione esta linha
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -397,8 +398,10 @@ const SalesPage = () => {
         <HeroSection>
           <Title>❝Sabe aquela sensação de não ser suficiente... de se sentir invisível?❞</Title>
           <Subtitle>Descubra como reconstruir sua autoestima e encontrar paz interior com apenas alguns minutos de leitura por dia.</Subtitle>
-          <EbookImage src="/images/ebook.png" alt="Capa do eBook Você Importa" />
-          <CTAButton href="https://pay.kirvano.com/f1fb5790-51b6-4d6c-9d2f-e835325ef1eb" target="_blank">👉 Quero me libertar da dor agora!</CTAButton>
+          <EbookImage src={ebookCover} alt="Capa do eBook Você Importa" />
+          <CTAButton href="https://pay.kirvano.com/f1fb5790-51b6-4d6c-9d2f-e835325ef1eb" target="_blank">
+            👉 Quero me libertar da dor agora!
+          </CTAButton>
         </HeroSection>
 
         <PainSection>
