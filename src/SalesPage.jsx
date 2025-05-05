@@ -1,475 +1,463 @@
-import React, { useEffect, useRef, useState } from "react";
-import styled, { keyframes, createGlobalStyle } from "styled-components";
-import { Helmet } from 'react-helmet';
-import ebookCover from './images/ebook.png'; // Adicione esta linha
+import React, { useState, useEffect } from "react";
+import styled, { createGlobalStyle } from "styled-components";
+import ebookCapa from './images/ebook.png'; // Importando a capa do ebook
 
-const fadeIn = keyframes`
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-`;
+// Imagem de marca d'água
+const watermarkUrl = 'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80';
 
 const GlobalStyle = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@300;400;600;700;900&family=Montserrat:wght@300;400;500;600&display=swap');
-  
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Montserrat', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    background: #FFFFFF;
-    color: #1A2B3C;
-    line-height: 1.8;
-    text-align: center;
-  }
-
   * {
     box-sizing: border-box;
   }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f7f7f7;
+    color: #333;
+    position: relative;
+  }
+
+  #root {
+    position: relative;
+    z-index: 1;
+  }
 `;
 
-const Container = styled.div`
-  font-family: 'Arial', sans-serif;
-  line-height: 1.6;
-  color: #333;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
+const Watermark = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: url(${watermarkUrl}) center center no-repeat;
+  background-size: cover;
+  opacity: 0.05;
+  z-index: 0;
+  pointer-events: none;
+`;
+
+const Wrapper = styled.div`
+  position: relative;
+  z-index: 1;
+`;
+
+const Hero = styled.section`
+  background: url('/img/bg.jpg') center center / cover no-repeat;
   text-align: center;
-`;
+  color: white;
+  padding: 120px 20px 40px;
+  position: relative;
 
-const HeroSection = styled.section`
-  background: #f9f9f9;
-  padding: 40px 20px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-`;
+  h1 {
+    font-size: 36px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    line-height: 1.4;
+    color: #000;
 
-const Title = styled.h1`
-  font-size: 2.5rem;
-  color: #222;
-  margin-bottom: 20px;
-`;
+    span {
+      color: #ff3e6c;
+      text-decoration: underline;
+      text-decoration-color: #ff3e6c; /* Cor do sublinhado */
+      text-decoration-thickness: 3px; /* Espessura do sublinhado */
+      text-underline-offset: 4px; /* Distância entre o texto e o sublinhado */
+    }
+  }
 
-const Subtitle = styled.h2`
-  font-size: 1.5rem;
-  color: #555;
-  margin-bottom: 30px;
-`;
+  h2 {
+    font-size: 22px;
+    font-weight: 400;
+    margin-bottom: 30px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+    color: #000;
+  }
 
-const EbookImage = styled.img`
-  max-width: 100%;
-  height: auto;
-  margin: 20px 0;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  iframe {
+    width: 100%;
+    max-width: 560px;
+    height: 315px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    margin-bottom: 20px; /* Adicionado para espaçamento */
+  }
+
+  a {
+    display: block; /* Garante que o botão fique em uma nova linha */
+    margin: 20px auto 0; /* Centraliza o botão e adiciona espaçamento */
+    max-width: 300px; /* Define uma largura máxima para o botão */
+  }
+
+  @media (min-width: 1024px) {
+    padding: 160px 40px 60px;
+
+    h1 {
+      font-size: 48px;
+    }
+
+    h2 {
+      font-size: 28px;
+    }
+
+    iframe {
+      max-width: 720px;
+      height: 405px;
+    }
+  }
 `;
 
 const CTAButton = styled.a`
   display: inline-block;
-  background: #28a745; /* Verde */
+  background: #ff3e6c;
   color: white;
+  font-weight: bold;
+  padding: 18px 40px;
+  border-radius: 12px;
+  font-size: 20px;
+  margin-top: 20px; /* Ajustado para espaçamento */
   text-decoration: none;
-  border: none;
-  padding: 15px 30px;
-  font-size: 1.2rem;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.3s;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+  transition: 0.3s ease;
 
   &:hover {
-    background: #218838; /* Verde mais escuro no hover */
+    background: #e63560;
+    transform: scale(1.05);
   }
 `;
 
-const Section = styled.section`
-  margin-bottom: 40px;
-  text-align: left;
-`;
+const PriceSection = styled.div`
+  background: #1a1a1a;
+  color: white;
+  padding: 50px 20px;
+  text-align: center;
 
-const SectionTitle = styled.h3`
-  font-size: 1.8rem;
-  color: #222;
-  margin-bottom: 20px;
-`;
+  .price-box {
+    display: inline-block;
+    background: #2c2c2c;
+    border-radius: 15px;
+    padding: 30px;
+    width: 280px;
+    margin: 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
 
-const Paragraph = styled.p`
-  font-size: 1.2rem;
-  margin-bottom: 20px;
-`;
+    .old-price {
+      font-size: 18px;
+      text-decoration: line-through;
+      color: #aaa;
+      margin-bottom: 15px;
+    }
 
-const List = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin-bottom: 20px;
-`;
+    .new-price {
+      font-size: 36px;
+      font-weight: 800;
+      color: #ff3e6c;
+      margin-bottom: 15px;
+    }
 
-const ListItem = styled.li`
-  font-size: 1.2rem;
-  margin-bottom: 10px;
-  &::before {
-    content: '✔️';
-    margin-right: 10px;
-    color: #007BFF;
+    .discount {
+      font-size: 14px;
+      color: #f0f0f0;
+      margin-bottom: 15px;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: #ff3e6c;
+      color: white;
+      font-weight: bold;
+      padding: 12px 30px;
+      border-radius: 12px;
+      font-size: 18px;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: 0.3s ease;
+      
+      &:hover {
+        background: #e63560;
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .price-box {
+      width: 320px;
+    }
   }
 `;
 
-const FAQ = styled.div`
-  margin-top: 40px;
-  text-align: left;
-`;
-
-const FAQItem = styled.div`
-  margin-bottom: 20px;
-`;
-
-const Question = styled.h4`
-  font-size: 1.2rem;
-  color: #222;
-  margin-bottom: 10px;
-`;
-
-const Answer = styled.p`
-  font-size: 1rem;
-  color: #555;
-`;
-
-const GuaranteeSection = styled.section`
-  background: #f0f8ff;
-  border: 2px solid #007BFF;
-  border-radius: 10px;
-  padding: 30px;
-  margin-bottom: 40px;
-  text-align: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-`;
-
-const GuaranteeTitle = styled.h3`
-  font-size: 2rem;
-  color: #007BFF;
-  margin-bottom: 20px;
-  font-weight: bold;
-`;
-
-const GuaranteeText = styled.p`
-  font-size: 1.2rem;
-  color: #333;
-  margin-bottom: 20px;
-  line-height: 1.8;
-`;
-
-const FAQSection = styled.section`
-  background: #f9f9f9;
-  border-radius: 10px;
-  padding: 30px;
-  margin-bottom: 40px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-`;
-
-const FAQTitle = styled.h3`
-  font-size: 2rem;
-  color: #222;
-  margin-bottom: 20px;
-  font-weight: bold;
-`;
-
-const FAQItemStyled = styled.div`
-  margin-bottom: 20px;
-`;
-
-const FAQQuestion = styled.h4`
-  font-size: 1.2rem;
-  color: #007BFF;
-  margin-bottom: 10px;
-  font-weight: bold;
-`;
-
-const FAQAnswer = styled.p`
-  font-size: 1rem;
-  color: #555;
-  line-height: 1.6;
-`;
-
-const CTAFinalButton = styled(CTAButton)`
-  font-size: 1.5rem;
-  padding: 15px 30px;
-  font-weight: bold;
-`;
-
-const PainSection = styled.section`
-  background: linear-gradient(135deg, #ff7e5f, #feb47b);
-  color: #fff;
-  padding: 40px;
-  border-radius: 10px;
-  margin-bottom: 40px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  text-align: center;
-`;
-
-const PainTitle = styled.h3`
-  font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 20px;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-`;
-
-const PainParagraph = styled.p`
-  font-size: 1.2rem;
-  line-height: 1.8;
-  margin-bottom: 20px;
-`;
-
-const PainList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 20px 0;
-`;
-
-const PainListItem = styled.li`
-  font-size: 1.2rem;
-  margin-bottom: 10px;
-  position: relative;
-  padding-left: 30px;
-
-  &::before {
-    content: '❌';
-    position: absolute;
-    left: 0;
-    color: #ff4d4d;
-    font-size: 1.5rem;
-  }
-`;
-
-const SolutionSection = styled.section`
-  background: linear-gradient(135deg, #6a11cb, #2575fc);
-  color: #fff;
-  padding: 50px;
-  border-radius: 10px;
-  margin-bottom: 40px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-  text-align: center;
-`;
-
-const SolutionTitle = styled.h3`
-  font-size: 2.2rem;
-  font-weight: bold;
-  margin-bottom: 20px;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-`;
-
-const SolutionParagraph = styled.p`
-  font-size: 1.3rem;
-  line-height: 1.8;
-  margin-bottom: 20px;
-`;
-
-const SolutionList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 30px 0;
-`;
-
-const SolutionListItem = styled.li`
-  font-size: 1.2rem;
-  margin-bottom: 15px;
-  position: relative;
-  padding-left: 40px;
-
-  &::before {
-    content: '✔️';
-    position: absolute;
-    left: 0;
-    color: #00cc99; /* Alterei a cor para um verde mais vibrante */
-    font-size: 1.5rem;
-  }
-`;
-
-const OfferSection = styled.section`
-  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-  color: #333;
-  padding: 50px;
-  border-radius: 15px;
-  margin-bottom: 40px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-`;
-
-const OfferTitle = styled.h3`
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 20px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: #d9534f;
-`;
-
-const OfferText = styled.p`
-  font-size: 1.4rem;
-  line-height: 1.8;
-  margin-bottom: 20px;
-  font-weight: 500;
-`;
-
-const PriceHighlight = styled.div`
-  font-size: 3rem;
-  font-weight: bold;
-  color: #28a745;
-  background: #fff;
-  padding: 10px 20px;
-  border-radius: 10px;
-  display: inline-block;
-  margin: 20px 0;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-`;
-
-const TimerContainer = styled.div`
-  margin-top: 20px;
-  font-size: 1.3rem;
-  color: #d9534f;
-  font-weight: bold;
+const ContentSection = styled.section`
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  padding: 60px 20px;
+  background: #ffffff;
+
+  div {
+    max-width: 500px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 14px;
+    margin: 20px;
+  }
+
+  h4 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #333;
+  }
+
+  p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #555;
+  }
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+    align-items: center;
+    gap: 40px;
+
+    div {
+      text-align: left;
+    }
+
+    img {
+      max-width: 400px;
+    }
+  }
+`;
+
+const Benefits = styled.div`
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
+  background: white;
+  padding: 40px 20px;
+  gap: 30px;
+
+  h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .benefit {
+    display: flex;
+    align-items: center;
+    background: #fafafa;
+    border-radius: 12px;
+    padding: 25px;
+    max-width: 400px;
+    text-align: left;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    gap: 15px;
+
+    span {
+      font-size: 30px; /* Tamanho do emoji */
+    }
+
+    p {
+      font-size: 16px;
+      color: #555;
+      margin: 0;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+
+    .benefit {
+      max-width: 300px;
+    }
+  }
 `;
 
-const TimerIcon = styled.span`
-  font-size: 1.5rem;
-`;
-
-const TimerText = styled.p`
-  font-size: 1.3rem;
-  color: #d9534f;
-  font-weight: bold;
-  margin-top: 20px;
+const UrgencySection = styled.section`
+  background: #ff3e6c;
+  color: white;
+  padding: 40px 20px;
   text-align: center;
+  border-radius: 12px;
+  margin-top: 40px;
+
+  h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+
+  p {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+
+  .countdown {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
 `;
 
-const CountdownTimer = () => {
-  const [timeLeft, setTimeLeft] = useState(15 * 60); // 15 minutes in seconds
+const WhyNowSection = styled.section`
+  background: #f7f7f7;
+  color: #333;
+  padding: 40px 20px;
+  text-align: center;
+  border-radius: 12px;
+  margin-top: 40px;
+
+  h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+
+    li {
+      font-size: 18px;
+      margin-bottom: 10px;
+      text-align: left;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+  }
+`;
+
+const App = () => {
+  const [timeLeft, setTimeLeft] = useState("");
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
+    const targetDate = new Date();
+    targetDate.setDate(targetDate.getDate() + 1); // Oferta válida até amanhã
+    targetDate.setHours(23, 59, 59, 999);
+
+    const interval = setInterval(() => {
+      const now = new Date();
+      const difference = targetDate - now;
+
+      if (difference <= 0) {
+        clearInterval(interval);
+        setTimeLeft("Oferta encerrada!");
+      } else {
+        const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((difference / (1000 * 60)) % 60);
+        const seconds = Math.floor((difference / 1000) % 60);
+        setTimeLeft(`${hours}h ${minutes}m ${seconds}s`);
+      }
     }, 1000);
 
-    return () => clearInterval(timer);
+    return () => clearInterval(interval);
   }, []);
 
-  const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
-  };
-
-  return <TimerText>⏳ Tempo restante: {formatTime(timeLeft)}</TimerText>;
-};
-
-const SalesPage = () => {
   return (
     <>
-      <Helmet>
-        <title>Você Importa - Cure Sua Dor Emocional e Renasça</title>
-        <meta name="description" content="Sinta-se valorizado, cure suas feridas emocionais e descubra sua importância com este eBook transformador. Garantia total!" />
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Product",
-            "name": "eBook Você Importa",
-            "description": "Sinta-se valorizado, cure suas feridas emocionais e descubra sua importância com este eBook transformador.",
-            "offers": {
-              "@type": "Offer",
-              "price": "9.99",
-              "priceCurrency": "BRL",
-              "availability": "https://schema.org/InStock"
-            },
-            "aggregateRating": {
-              "@type": "AggregateRating",
-              "ratingValue": "4.8",
-              "reviewCount": "150"
-            }
-          })}
-        </script>
-      </Helmet>
-      <Container>
-        <HeroSection>
-          <Title>❝Sabe aquela sensação de não ser suficiente... de se sentir invisível?❞</Title>
-          <Subtitle>Descubra como reconstruir sua autoestima e encontrar paz interior com apenas alguns minutos de leitura por dia.</Subtitle>
-          <EbookImage src={ebookCover} alt="Capa do eBook Você Importa" />
+      <GlobalStyle />
+      <Watermark />
+      <Wrapper>
+        <Hero>
+          <h1>
+            VOCÊ VAI DESCOBRIR COMO SUPERAR A DOR EMOCIONAL EM APENAS 7 DIAS<br />
+            <span>MESMO QUE VOCÊ NÃO ACREDITE MAIS EM VOCÊ</span>
+          </h1>
+          <h2>
+            Um método direto, acolhedor e 100% prático para reconstruir sua autoestima
+            e transformar sua dor em força — sem precisar de terapia longa ou remédios.
+          </h2>
+          <iframe
+            src="https://www.youtube.com/embed/v6KpfIfHoCY"
+            title="Vídeo: Você Importa"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
           <CTAButton href="https://pay.kirvano.com/f1fb5790-51b6-4d6c-9d2f-e835325ef1eb" target="_blank">
-            👉 Quero me libertar da dor agora!
+            Quero Transformar Minha Vida
           </CTAButton>
-        </HeroSection>
+        </Hero>
 
-        <PainSection>
-          <PainTitle>A Dor</PainTitle>
-          <PainParagraph>Você já se pegou chorando escondido, engolindo a dor porque "ninguém entenderia"? Já tentou ser forte o tempo todo, mas por dentro estava em pedaços?</PainParagraph>
-          <PainParagraph>Sentir-se rejeitado. Ignorado. Frustrado. Parece que o mundo não se importa com você... Mas e se o problema não for você?</PainParagraph>
-          <PainList>
-            <PainListItem>Se sente constantemente sozinho, mesmo cercado de pessoas</PainListItem>
-            <PainListItem>Tem medo de se abrir, por já ter sido ferido antes</PainListItem>
-            <PainListItem>Se esforça demais para agradar e recebe pouco em troca</PainListItem>
-          </PainList>
-          <PainParagraph>Se você disse “sim” a pelo menos uma dessas frases... Esse eBook foi feito especialmente pra você.</PainParagraph>
-        </PainSection>
+        <UrgencySection>
+          <h3>Essa oferta  só estará disponível até amanhã!</h3>
+          <p>Não perca a chance de transformar sua vida emocional por um preço especial.</p>
+          <div className="countdown">{timeLeft}</div>
+          <CTAButton href="https://pay.kirvano.com/f1fb5790-51b6-4d6c-9d2f-e835325ef1eb" target="_blank">
+            Aproveitar agora
+          </CTAButton>
+        </UrgencySection>
 
-        <SolutionSection>
-          <SolutionTitle>A Solução</SolutionTitle>
-          <SolutionParagraph>❝Você não precisa continuar vivendo assim.❞ Existe uma forma de se curar, de se fortalecer emocionalmente e, finalmente, sentir que você importa de verdade.</SolutionParagraph>
-          <SolutionList>
-            <SolutionListItem>Técnica simples de libertação emocional</SolutionListItem>
-            <SolutionListItem>Mensagens que falam direto com sua dor</SolutionListItem>
-            <SolutionListItem>Transformações reais em menos de 7 dias</SolutionListItem>
-            <SolutionListItem>Escrita suave, direta e acolhedora</SolutionListItem>
-          </SolutionList>
-          <SolutionParagraph>Criado com base em estudos de neurociência e psicologia emocional. Já impactou centenas de pessoas com feridas emocionais profundas.</SolutionParagraph>
-        </SolutionSection>
+        <PriceSection>
+          <div className="price-box">
+            <div className="old-price">De R$ 67,00</div>
+            <div className="new-price">Por apenas R$ 17,00</div>
+            <div className="discount">Promoção por tempo limitado</div>
+            <CTAButton className="cta-button" href="https://pay.kirvano.com/f1fb5790-51b6-4d6c-9d2f-e835325ef1eb" target="_blank">
+              Comprar agora
+            </CTAButton>
+          </div>
+        </PriceSection>
 
-        <OfferSection>
-          <OfferTitle>Oferta Especial</OfferTitle>
-          <OfferText>💰 Por menos do que o preço de um lanche, você pode transformar o seu interior.</OfferText>
-          <PriceHighlight>R$ 9,99</PriceHighlight>
-          <OfferText>Oferta disponível por tempo limitado. Não perca essa oportunidade única de mudar sua vida.</OfferText>
-          <TimerContainer>
-            <TimerIcon>⏳</TimerIcon>
-            <CountdownTimer />
-          </TimerContainer>
-          <CTAButton href="https://pay.kirvano.com/f1fb5790-51b6-4d6c-9d2f-e835325ef1eb" target="_blank">✅ Sim, eu quero minha cura agora.</CTAButton>
-        </OfferSection>
+        <ContentSection>
+          <img src={ebookCapa} alt="Capa do Ebook Você Importa" />
+          <div>
+            <h4>O que é o Ebook Você Importa?</h4>
+            <p>
+              Um guia prático e emocional que ajuda pessoas a lidarem com traumas, inseguranças e dores emocionais.
+              Com exercícios, vídeo-aulas e ferramentas de autoconhecimento, você poderá resgatar sua autoestima e bem-estar.
+            </p>
+            <CTAButton href="https://pay.kirvano.com/f1fb5790-51b6-4d6c-9d2f-e835325ef1eb" target="_blank">Comprar agora</CTAButton>
+          </div>
+        </ContentSection>
 
-        <GuaranteeSection>
-          <GuaranteeTitle>🛡️ Garantia</GuaranteeTitle>
-          <GuaranteeText>
-            Garantia incondicional de 7 dias. Se você não sentir nenhuma transformação emocional, devolvemos seu dinheiro. Sem perguntas.
-          </GuaranteeText>
-          <GuaranteeText>
-            Você não perde nada. Mas pode ganhar tudo.
-          </GuaranteeText>
-        </GuaranteeSection>
+        <Benefits>
+          <h3>Além do ebook você vai ter direito a:</h3>
+          <div className="benefit">
+            <span>📘</span>
+            <p>Ebook PDF com leitura simples e transformadora</p>
+          </div>
+          <div className="benefit">
+            <span>💻</span>
+            <p>Reuniões online para apoio emocional e prático</p>
+          </div>
+          <div className="benefit">
+            <span>🧘</span>
+            <p>Exercícios guiados para clareza emocional</p>
+          </div>
+          <div className="benefit">
+            <span>🤝</span>
+            <p>Grupo privado de apoio (opcional)</p>
+          </div>
+        </Benefits>
 
-        <FAQSection>
-          <FAQTitle>FAQ</FAQTitle>
-          <FAQItemStyled>
-            <FAQQuestion>❓ Esse conteúdo serve para qualquer idade?</FAQQuestion>
-            <FAQAnswer>✔️ Sim, é uma leitura leve e acessível para qualquer pessoa a partir dos 16 anos.</FAQAnswer>
-          </FAQItemStyled>
-          <FAQItemStyled>
-            <FAQQuestion>❓ Quanto tempo leva para ver resultado?</FAQQuestion>
-            <FAQAnswer>✔️ A maioria dos leitores relata alívio emocional já nos primeiros dias.</FAQAnswer>
-          </FAQItemStyled>
-          <FAQItemStyled>
-            <FAQQuestion>❓ É seguro comprar?</FAQQuestion>
-            <FAQAnswer>✔️ Sim! O pagamento é 100% seguro, e você ainda tem garantia total de 7 dias.</FAQAnswer>
-          </FAQItemStyled>
-        </FAQSection>
-
-        <CTAFinalButton href="https://pay.kirvano.com/f1fb5790-51b6-4d6c-9d2f-e835325ef1eb" target="_blank">🔒 Quero sentir que eu importo</CTAFinalButton>
-      </Container>
+        <WhyNowSection>
+          <h3>Por que agir agora?</h3>
+          <ul>
+            <li>✔ A dor não vai embora sozinha.</li>
+            <li>✔ Quanto mais tempo você esperar, mais profundo o buraco.</li>
+            <li>✔ Você merece paz hoje, não só amanhã.</li>
+          </ul>
+          <CTAButton href="https://pay.kirvano.com/f1fb5790-51b6-4d6c-9d2f-e835325ef1eb" target="_blank">
+            Comece sua transformação agora
+          </CTAButton>
+        </WhyNowSection>
+      </Wrapper>
     </>
   );
 };
 
-export default SalesPage;
+export default App;
