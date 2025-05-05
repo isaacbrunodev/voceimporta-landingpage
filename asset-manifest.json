@@ -1,11 +1,11 @@
 {
   "files": {
-    "main.js": "/voceimporta-landingpage/static/js/main.101da352.js",
+    "main.js": "/voceimporta-landingpage/static/js/main.f2d294da.js",
     "static/media/ebook.png": "/voceimporta-landingpage/static/media/ebook.1fd87efc9c679c4b377c.png",
     "index.html": "/voceimporta-landingpage/index.html",
-    "main.101da352.js.map": "/voceimporta-landingpage/static/js/main.101da352.js.map"
+    "main.f2d294da.js.map": "/voceimporta-landingpage/static/js/main.f2d294da.js.map"
   },
   "entrypoints": [
-    "static/js/main.101da352.js"
+    "static/js/main.f2d294da.js"
   ]
 }
