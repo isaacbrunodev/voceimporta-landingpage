@@ -1,11 +1,16 @@
 {
   "files": {
-    "main.js": "/voceimporta-landingpage/static/js/main.f2d294da.js",
+    "main.js": "/voceimporta-landingpage/static/js/main.1ec88dc3.js",
     "static/media/ebook.png": "/voceimporta-landingpage/static/media/ebook.1fd87efc9c679c4b377c.png",
+    "static/media/PV4.jpg": "/voceimporta-landingpage/static/media/PV4.1dc213c28675002b17ca.jpg",
+    "static/media/PV1.jpg": "/voceimporta-landingpage/static/media/PV1.5f27b7ac6dab74ca2651.jpg",
+    "static/media/PERFILISAAC.jpg": "/voceimporta-landingpage/static/media/PERFILISAAC.07406fda2f473c0ae0ba.jpg",
+    "static/media/PV3.jpg": "/voceimporta-landingpage/static/media/PV3.bdf29d1097593c98b936.jpg",
+    "static/media/PV2.jpg": "/voceimporta-landingpage/static/media/PV2.f5267fb8f17b025f9e57.jpg",
     "index.html": "/voceimporta-landingpage/index.html",
-    "main.f2d294da.js.map": "/voceimporta-landingpage/static/js/main.f2d294da.js.map"
+    "main.1ec88dc3.js.map": "/voceimporta-landingpage/static/js/main.1ec88dc3.js.map"
   },
   "entrypoints": [
-    "static/js/main.f2d294da.js"
+    "static/js/main.1ec88dc3.js"
   ]
 }
